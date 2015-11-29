@@ -2,8 +2,8 @@ require 'twitter_ebooks'
 
 class TwilightWarmth < Ebooks::Bot
   # This is added to the hour time for testing and simulating
-  # different timezones.
-  @@hour_adjustment = 0
+  # different timezones. -6 is for adjusting heroku to CST
+  @@hour_adjustment = -6
   # The maximum number of tweets of a user that can be retweeted
   # per hour
   @@max_tweets_per_user_per_hour = 3
@@ -50,9 +50,11 @@ class TwilightWarmth < Ebooks::Bot
 
   def get_current_hour
     hour = Time.new.hour + @@hour_adjustment
-    # If our hour adjustment puts it over a day, wrap it around
+    # If our hour adjustment puts it over/under a regular day, wrap it around
     if hour > 24
       hour = hour - 24
+    elsif hour < 0
+      hour = hour + 24
     end
     hour
   end
