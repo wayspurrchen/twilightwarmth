@@ -6,7 +6,7 @@ class TwilightWarmth < Ebooks::Bot
   @@hour_adjustment = 14
   # The maximum number of tweets of a user that can be retweeted
   # per hour
-  @@max_tweets_per_user_per_hour = 7
+  @@max_tweets_per_user_per_hour = 3
 
   # Configuration here applies to all MyBots
   def configure
@@ -36,7 +36,7 @@ class TwilightWarmth < Ebooks::Bot
     self.favorite_posts
 
     # Core code
-    scheduler.every '10s' do
+    scheduler.every '1m' do
       self.favorite_posts
     end
   end
@@ -59,6 +59,7 @@ class TwilightWarmth < Ebooks::Bot
 
   def favorite_posts
     hour = self.get_current_hour
+    start_seconds = Time.now
 
     # Clear our settings in @user_favorites_this_hour if @current_hour has changed
     if hour != @current_hour
@@ -74,8 +75,8 @@ class TwilightWarmth < Ebooks::Bot
       while no_favorite_yet do
         # Only try to favorite something 5 times. If we fail,
         # give up.
-        if attempts == 5
-          puts "Tried 5 times this loop, giving up."
+        if attempts == 3
+          puts "Tried 3 times this loop, giving up."
           break
         end
         attempts += 1
@@ -91,7 +92,7 @@ class TwilightWarmth < Ebooks::Bot
           # If we've already favorited this person's tweets this hour,
           # skip to another user and try again
           if favorites == @@max_tweets_per_user_per_hour
-            puts "Tweeted " + random_user.screen_name + " too many times already."
+            puts "Favorited " + random_user.screen_name + " too many times already."
             next
           end
         end
