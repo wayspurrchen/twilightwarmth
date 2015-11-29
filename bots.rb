@@ -3,7 +3,7 @@ require 'twitter_ebooks'
 class TwilightWarmth < Ebooks::Bot
   # This is added to the hour time for testing and simulating
   # different timezones.
-  @@hour_adjustment = 14
+  @@hour_adjustment = 0
   # The maximum number of tweets of a user that can be retweeted
   # per hour
   @@max_tweets_per_user_per_hour = 3
